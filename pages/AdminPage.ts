@@ -31,8 +31,22 @@ export class AdminPage extends BasePage {
     }
 
     async completeEmployeeName(employeeName: string) {
-        await this.employeeName.fill(employeeName);
-        await this.page.locator('.oxd-autocomplete-option > span', { hasText: employeeName }).click();
+        await Promise.all([
+            this.page.waitForResponse(response =>
+                response.url().includes('/api/v2/pim/employees') &&
+                response.status() === 200
+            ),
+            this.employeeName.fill(employeeName),
+        ]);
+
+        const noResults = this.page.locator('.oxd-autocomplete-option', { hasText: 'No Records Found' });
+        const option = this.page.locator('.oxd-autocomplete-option > span', { hasText: employeeName });
+
+        if (await noResults.isVisible()) {
+            throw new Error(`Employee "${employeeName}" not found in autocomplete`);
+        }
+
+        await option.click();
     }
 
     async setStatus(status: string) {
