@@ -122,7 +122,8 @@ storage-login-playwright/
 ├── pages/                          # Page Object Model (POM)
 │   ├── BasePage.ts                 # Abstract base class with shared methods
 │   ├── AdminPage.ts                # Page Object for the Admin > User Management section
-│   └── DirectoryPage.ts            # Page Object for the Directory section
+│   ├── DirectoryPage.ts            # Page Object for the Directory section
+│   └── MenuPage.ts                 # Page Object for the main navigation sidebar
 │
 ├── tests/
 │   ├── auth.setup.ts               # Setup: login and storage state persistence
@@ -178,3 +179,8 @@ Page Object for the **Directory** section. Provides:
 - `getCardResultSize()` — returns the total number of result cards
 - `getCardResultAt(index)` — returns the card locator at a given index
 - `getCardHeaderAt(index)` — returns the text of the card header at a given index
+
+### `MenuPage`
+Page Object for the **main navigation sidebar**. Centralizes sidebar navigation so tests don't hardcode `getByRole('link')` calls directly. Provides:
+- `navigateToAdminPage()` — clicks the Admin sidebar link
+- `navigateToDirectoryPage()` — clicks the Directory sidebar link
