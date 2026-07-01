@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { AdminPage } from '../../pages/AdminPage';
+import { MenuPage } from '../../pages/MenuPage';
 
 test('Go to admin section and search valid user', async ({ page }) => {
    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index');
-   await page.getByRole('link', { name: 'Admin' }).click();
-
+   const menuPage = new MenuPage(page);
    const adminPage = new AdminPage(page);
+   await menuPage.navigateToAdminPage();
    await adminPage.completeUsername('Admin');
    await adminPage.selectRole('Admin');
    await adminPage.completeEmployeeName('Rizwan Ali Khan');
