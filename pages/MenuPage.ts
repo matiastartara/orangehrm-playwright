@@ -16,6 +16,12 @@ export class MenuPage extends BasePage {
     }
     
     async navigateToDirectoryPage() {
-        await this.directoryMenu.click();
+        await Promise.all([
+            this.page.waitForResponse(response =>
+                response.url().includes('/api/v2/directory/employees') &&
+                response.status() === 200
+            ),
+            this.directoryMenu.click(),
+        ]);
     }                   
 }

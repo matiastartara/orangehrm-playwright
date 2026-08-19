@@ -11,28 +11,30 @@ export class DirectoryPage extends BasePage {
     constructor(page: Page) {
         super(page);
         this.employeeName = page.getByText('Employee Name');
-        this.jobTitle = page.locator('.oxd-icon.bi-caret-down-fill.oxd-select-text--arrow').first();
-        this.location = page.locator('div:nth-child(3) > .oxd-input-group > div:nth-child(2) > .oxd-select-wrapper > .oxd-select-text > .oxd-select-text--after > .oxd-icon');
+        this.jobTitle = page.locator('.oxd-input-group', { hasText: 'Job Title' }).locator('.oxd-select-wrapper');
+        this.location = page.locator('.oxd-input-group', { hasText: 'Location' }).locator('.oxd-select-wrapper');
         this.searchButton = page.getByRole('button', { name: 'Search' });
         this.cardResult = page.locator('.orangehrm-container .orangehrm-directory-card');
     }
 
     async setJobTitle(title: string) {
         await this.jobTitle.click();
-        await this.page.locator('.oxd-grid-item.oxd-grid-item--gutters .oxd-select-option span', { hasText: title }).click();
+        await this.page.locator('.oxd-select-dropdown .oxd-select-option', { hasText: title }).click();
     }
 
     async setLocation(location: string) {
         await this.location.click();
-        await this.page.locator('.oxd-grid-item.oxd-grid-item--gutters .oxd-select-option span', { hasText: location }).click();
+        await this.page.locator('.oxd-select-dropdown .oxd-select-option', { hasText: location }).click();
     }
 
     async search() {
-        await this.searchButton.click();
-        await this.page.waitForResponse(response =>
-            response.url().includes('/api/v2/directory/employees') &&
-            response.status() === 200
-        );
+        await Promise.all([
+            this.page.waitForResponse(response =>
+                response.url().includes('/api/v2/directory/employees') &&
+                response.status() === 200
+            ),
+            this.searchButton.click(),
+        ]);
     }
 
     async getCardResultSize(): Promise<number> {

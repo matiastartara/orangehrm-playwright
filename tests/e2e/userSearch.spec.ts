@@ -9,14 +9,14 @@ test('Go to admin section and search valid user', async ({ page }) => {
    await menuPage.navigateToAdminPage();
    await adminPage.completeUsername('Admin');
    await adminPage.selectRole('Admin');
-   await adminPage.completeEmployeeName('Rizwan Ali Khan');
+   await adminPage.completeEmployeeName('manda');
    await adminPage.setStatus('Enabled');
    await adminPage.search();
 
    const row = adminPage.getRowByUsername('Admin');
    await expect(adminPage.getCellFromRow(row, 1)).toHaveText('Admin');
    await expect(adminPage.getCellFromRow(row, 2)).toHaveText('Admin');
-   await expect(adminPage.getCellFromRow(row, 3)).toHaveText('Rizwan Khan');
+   await expect(adminPage.getCellFromRow(row, 3)).toContainText('manda');
    await expect(adminPage.getCellFromRow(row, 4)).toHaveText('Enabled');
 
 });

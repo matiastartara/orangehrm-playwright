@@ -7,3 +7,11 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 .auth/
+
+# MCP & Tool Artifacts
+.playwright-mcp/
+
+# IDE & OS
+.vscode/
+.DS_Store
+*.log
