@@ -67,6 +67,7 @@ npx playwright test --project=setup
 ### Run a specific test file
 
 ```bash
+npx playwright test tests/e2e/login.spec.ts
 npx playwright test tests/e2e/userSearch.spec.ts
 npx playwright test tests/e2e/directorySearch.spec.ts
 ```
@@ -101,6 +102,7 @@ This project uses **Storage State** to persist the user session:
 
 1. The `setup` project runs `tests/auth.setup.ts`, which performs the login on OrangeHRM and saves the session state (cookies and localStorage) to `.auth/user.json`.
 2. The `e2e-chromium` project loads that state before each test, skipping the login step entirely.
+3. Specific test specs (such as `tests/e2e/login.spec.ts`) override the global `storageState` with `undefined` to perform authentication testing in an unauthenticated browser context.
 
 > The `.auth/user.json` file is auto-generated and included in `.gitignore`.
 
@@ -121,6 +123,7 @@ storage-login-playwright/
 │
 ├── pages/                          # Page Object Model (POM)
 │   ├── BasePage.ts                 # Abstract base class with shared methods
+│   ├── LoginPage.ts                # Page Object for Login page and authentication actions
 │   ├── AdminPage.ts                # Page Object for the Admin > User Management section
 │   ├── DirectoryPage.ts            # Page Object for the Directory section
 │   └── MenuPage.ts                 # Page Object for the main navigation sidebar
@@ -128,6 +131,7 @@ storage-login-playwright/
 ├── tests/
 │   ├── auth.setup.ts               # Setup: login and storage state persistence
 │   └── e2e/
+│       ├── login.spec.ts           # E2E test: login flows and unauthenticated checks
 │       ├── userSearch.spec.ts      # E2E test: user search in the Admin panel
 │       └── directorySearch.spec.ts # E2E test: employee search in the Directory
 │
@@ -160,6 +164,13 @@ Abstract base class extended by all Page Objects. Exposes reusable methods:
 - `waitForPageLoad()` — waits for the `domcontentloaded` event
 - `getTitle()` — returns the page title
 - `reload()` — reloads the page and waits for it to load
+
+### `LoginPage`
+Page Object for the **Login** page and authentication flows. Provides:
+- `navigateToLogin()` — navigates directly to the login URL
+- `forceLogout()` — logs out current session and redirects to login
+- `login(username, password)` — fills credentials and submits the login form
+- Exposes locators for input fields, buttons, dashboard heading, and error messages (`invalidCredentialsMessage`, `requiredErrorMessages`)
 
 ### `AdminPage`
 Page Object for the **Admin > User Management** section. Provides:
