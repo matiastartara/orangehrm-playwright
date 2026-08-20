@@ -10,6 +10,7 @@ node_modules/
 
 # MCP & Tool Artifacts
 .playwright-mcp/
+.playwright-cli/
 
 # IDE & OS
 .vscode/
