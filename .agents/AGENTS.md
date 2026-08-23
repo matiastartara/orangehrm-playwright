@@ -39,28 +39,39 @@ playwright.config.ts
 - Locators are declared as `readonly` properties in the constructor.
 - Methods should be **async** and represent user actions (e.g., `search()`, `setJobTitle()`).
 - Methods that wait for network responses should use `page.waitForResponse()` — see `DirectoryPage.search()` and `AdminPage.completeEmployeeName()` as reference.
+- **NO assertions (`expect`) in Page Objects**: Keep assertions strictly inside test spec files (`tests/e2e/*.spec.ts`). Page Objects encapsulate structure and actions, while tests perform validations.
 
 ### Tests
 
 - Tests live in `tests/e2e/` and use the `e2e-chromium` project (storageState is loaded automatically).
 - **Do not add login steps inside test files** — authentication is handled by `auth.setup.ts`.
 - Each spec file tests a single feature or page section.
-- Use `expect` assertions on Page Object locators or return values, not raw `page` locators.
+- Inspect `pages/` to **reuse existing Page Objects** and methods before creating duplicates.
+- Use `expect` assertions in the spec file on Page Object locators or return values, not inside Page Object methods.
+- **AAA Pattern (Arrange-Act-Assert)**: Always structure tests with explicit comments:
+  - `// Arrange`: Page Object initialization, navigation, and initial state setup.
+  - `// Act`: Executing user interactions (filling forms, selecting dropdowns, clicking buttons).
+  - `// Assert`: Performing validations (`expect`) on final state.
 
 ### Naming
 
 | What | Convention |
 |---|---|
 | Page Object files | `PascalCase` + `Page.ts` suffix (e.g., `AdminPage.ts`) |
-| Spec files | `camelCase` + `.spec.ts` suffix (e.g., `userSearch.spec.ts`) |
+| Spec files | `kebab-case` + `.spec.ts` suffix (e.g., `user-search.spec.ts`) |
 | Locator properties | `camelCase` noun (e.g., `searchButton`, `cardResult`) |
 | Action methods | `camelCase` verb (e.g., `search()`, `setJobTitle()`) |
 | Query methods | `camelCase` with `get` prefix (e.g., `getRowByUsername()`) |
 
-### Locator strategy
+### Locator Strategy (Playwright Priority Hierarchy)
 
-- Prefer **role-based locators** (`getByRole`, `getByText`) over CSS selectors.
-- Use CSS selectors only when role-based alternatives are not available (e.g., `DirectoryPage`'s dropdowns).
+Prefer user-facing and resilient locators in the following strict order of priority:
+1. `getByRole()` — **Gold Standard** (e.g., `getByRole('button', { name: 'Save' })`).
+2. `getByLabel()` — Ideal for form fields with associated `<label>`.
+3. `getByPlaceholder()` — Useful for inputs with placeholder text.
+4. `getByText()` / `getByTitle()` / `getByAltText()` — For static UI text, titles, or image alt text.
+5. `getByTestId()` — **Dedicated escape hatch** when accessible attributes are unavailable (`data-testid`).
+6. **CSS / XPath**: Use only as a last resort when no role-based or test-id locators are available (e.g., custom framework dropdowns), and document why.
 - Avoid `nth()` unless strictly necessary — and document why.
 
 ---
@@ -89,5 +100,5 @@ The `e2e-chromium` project **depends on** `setup`, so running `npx playwright te
 1. Create `pages/NewSectionPage.ts` extending `BasePage`.
 2. Declare locators as `readonly` in the constructor.
 3. Implement action and query methods following the naming conventions above.
-4. Create `tests/e2e/newSectionFeature.spec.ts` importing the new Page Object.
+4. Create `tests/e2e/new-section-feature.spec.ts` importing the new Page Object.
 5. Update `README.md` → **Project Structure** and **Page Objects** sections.
