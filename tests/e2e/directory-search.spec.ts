@@ -6,6 +6,7 @@ import { MenuPage } from '../../pages/MenuPage';
 test('Search and validate user in the directory', async ({ page }) => {
   // Arrange
   await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index');
+  await expect(page).toHaveURL(/.*dashboard/);
   const menuPage = new MenuPage(page);
   const directoryPage = new DirectoryPage(page);
   await menuPage.navigateToDirectoryPage();

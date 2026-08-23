@@ -5,6 +5,7 @@ import { MenuPage } from '../../pages/MenuPage';
 test('Go to admin section and search valid user', async ({ page }) => {
   // Arrange
   await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index');
+  await expect(page).toHaveURL(/.*dashboard/);
   const menuPage = new MenuPage(page);
   const adminPage = new AdminPage(page);
   await menuPage.navigateToAdminPage();

@@ -43,6 +43,16 @@ export default defineConfig({
       },
       dependencies: ['setup'],
       testDir: './tests/e2e',
-    }
+      testIgnore: [/login\.spec\.ts/],
+    },
+    {
+      name: 'e2e-login',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: { cookies: [], origins: [] },
+      },
+      testDir: './tests/e2e',
+      testMatch: [/login\.spec\.ts/],
+    },
   ],
 });

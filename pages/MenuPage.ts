@@ -12,14 +12,20 @@ export class MenuPage extends BasePage {
     }
     
     async navigateToAdminPage() {   
-        await this.adminMenu.click();
+        await Promise.all([
+            this.page.waitForResponse(response =>
+                response.url().includes('/api/v2/admin/users') &&
+                (response.status() === 200 || response.status() === 304)
+            ),
+            this.adminMenu.click(),
+        ]);
     }
     
     async navigateToDirectoryPage() {
         await Promise.all([
             this.page.waitForResponse(response =>
                 response.url().includes('/api/v2/directory/employees') &&
-                response.status() === 200
+                (response.status() === 200 || response.status() === 304)
             ),
             this.directoryMenu.click(),
         ]);

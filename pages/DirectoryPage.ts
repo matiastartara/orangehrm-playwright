@@ -31,7 +31,7 @@ export class DirectoryPage extends BasePage {
         await Promise.all([
             this.page.waitForResponse(response =>
                 response.url().includes('/api/v2/directory/employees') &&
-                response.status() === 200
+                (response.status() === 200 || response.status() === 304)
             ),
             this.searchButton.click(),
         ]);
