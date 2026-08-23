@@ -3,12 +3,13 @@ import { BasePage } from './BasePage';
 
 export class MenuPage extends BasePage {
     readonly adminMenu: Locator;
-    readonly directoryMenu: Locator;
+    readonly pimMenu: Locator;
 
     constructor(page: Page) {
         super(page);
         this.adminMenu = page.getByRole('link', { name: 'Admin' });
         this.directoryMenu = page.getByRole('link', { name: 'Directory' });
+        this.pimMenu = page.getByRole('link', { name: 'PIM' });
     }
     
     async navigateToAdminPage() {   
@@ -29,5 +30,15 @@ export class MenuPage extends BasePage {
             ),
             this.directoryMenu.click(),
         ]);
-    }                   
+    }
+
+    async navigateToPimPage() {
+        await Promise.all([
+            this.page.waitForResponse(response =>
+                response.url().includes('/api/v2/pim/employees') &&
+                (response.status() === 200 || response.status() === 304)
+            ),
+            this.pimMenu.click(),
+        ]);
+    }
 }
