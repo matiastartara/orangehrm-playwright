@@ -131,6 +131,8 @@ storage-login-playwright/
 │   └── PersonalDetailsPage.ts     # Page Object for the Personal Details employee page
 │
 ├── tests/
+│   ├── api/
+│   │   └── api.spec.ts             # API REST tests (PIM, Admin, Directory, Validations)
 │   ├── auth.setup.ts               # Setup: login and storage state persistence
 │   └── e2e/
 │       ├── add-employee.spec.ts    # E2E test: add employee in PIM and edit Personal Details
@@ -156,8 +158,9 @@ storage-login-playwright/
 | `setup` | Performs login and saves the Storage State |
 | `e2e-chromium` | Runs E2E tests on Chrome using the saved session |
 | `e2e-login` | Runs authentication tests in isolated clean context |
+| `api` | Runs REST API tests; authenticates via HTTP requests, no browser involved |
 
-E2E tests depend on the `setup` project, so the login step runs automatically first.
+E2E tests depend on the `setup` project, so the login step runs automatically first. The `api` project authenticates itself over HTTP and does not depend on `setup`.
 
 ---
 
