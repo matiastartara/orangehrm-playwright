@@ -54,5 +54,9 @@ export default defineConfig({
       testDir: './tests/e2e',
       testMatch: [/login\.spec\.ts/],
     },
+    {
+      name: 'api',
+      testDir: './tests/api',
+    },
   ],
 });

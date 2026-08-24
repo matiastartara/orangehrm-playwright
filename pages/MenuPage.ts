@@ -4,6 +4,7 @@ import { BasePage } from './BasePage';
 export class MenuPage extends BasePage {
     readonly adminMenu: Locator;
     readonly pimMenu: Locator;
+    readonly directoryMenu: Locator;
 
     constructor(page: Page) {
         super(page);

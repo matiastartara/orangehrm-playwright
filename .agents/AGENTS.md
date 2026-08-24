@@ -53,7 +53,9 @@ playwright.config.ts
   - `// Act`: Executing user interactions (filling forms, selecting dropdowns, clicking buttons).
   - `// Assert`: Performing validations (`expect`) on final state.
 
-### Naming
+### Naming & Language
+
+- **Language**: All code, comments, docstrings, test spec titles, and descriptions must strictly be written in **English**.
 
 | What | Convention |
 |---|---|
@@ -81,9 +83,11 @@ Prefer user-facing and resilient locators in the following strict order of prior
 | Project name | Purpose |
 |---|---|
 | `setup` | Runs `auth.setup.ts`, saves session to `.auth/user.json` |
-| `e2e-chromium` | Runs all specs in `tests/e2e/` with pre-loaded session |
+| `e2e-chromium` | Runs all specs in `tests/e2e/` (except `login.spec.ts`) with pre-loaded session |
+| `e2e-login` | Runs `login.spec.ts` in an isolated context with no storage state |
+| `api` | Runs specs in `tests/api/` against the REST API; authenticates via HTTP requests, no browser or storage state involved |
 
-The `e2e-chromium` project **depends on** `setup`, so running `npx playwright test` always runs setup first.
+The `e2e-chromium` project **depends on** `setup`, so running `npx playwright test` always runs setup first. The `api` project authenticates itself over HTTP and does **not** depend on `setup`.
 
 ---
 
