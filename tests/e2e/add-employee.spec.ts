@@ -17,6 +17,7 @@ test('Add new employee and complete personal details subsection', async ({ page 
   // Act
   await pimPage.clickAdd();
   await pimPage.fillEmployeeName('John', 'Doe', 'Smith');
+  await pimPage.setEmployeeId(Date.now().toString().slice(-6));
   await pimPage.save();
 
   await personalDetailsPage.fillFirstSubsectionDetails('9876');

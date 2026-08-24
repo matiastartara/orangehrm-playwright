@@ -6,6 +6,7 @@ export class PimPage extends BasePage {
     readonly firstNameInput: Locator;
     readonly middleNameInput: Locator;
     readonly lastNameInput: Locator;
+    readonly employeeIdInput: Locator;
     readonly saveButton: Locator;
 
     constructor(page: Page) {
@@ -14,6 +15,7 @@ export class PimPage extends BasePage {
         this.firstNameInput = page.getByRole('textbox', { name: 'First Name' });
         this.middleNameInput = page.getByRole('textbox', { name: 'Middle Name' });
         this.lastNameInput = page.getByRole('textbox', { name: 'Last Name' });
+        this.employeeIdInput = page.locator('.oxd-input-group', { hasText: 'Employee Id' }).locator('input');
         this.saveButton = page.getByRole('button', { name: 'Save' });
     }
 
@@ -25,6 +27,10 @@ export class PimPage extends BasePage {
         await this.firstNameInput.fill(firstName);
         await this.middleNameInput.fill(middleName);
         await this.lastNameInput.fill(lastName);
+    }
+
+    async setEmployeeId(employeeId: string) {
+        await this.employeeIdInput.fill(employeeId);
     }
 
     async save() {
